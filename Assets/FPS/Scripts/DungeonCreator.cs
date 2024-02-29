@@ -35,8 +35,8 @@ public class DungeonCreator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            CreateDungeon();
-            player.GetComponent<Health>().CurrentHealth = 100;
+            // Reload the scene
+            UnityEngine.SceneManagement.SceneManager.LoadScene(3);
         }
     }
     public void CreateDungeon()
@@ -64,14 +64,14 @@ public class DungeonCreator : MonoBehaviour
             if (!playerRoomCreated)
             {
                 // Make the first room the player room
-                AddPlayerToRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner);
+                PlayerRoom playerRoom = new PlayerRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner, player);
+                playerRoom.MovePlayerToCenterOfThisRoom();
                 playerRoomCreated = true;
             }
-            else if (i == listOfRooms.Count - 10)// Last generated room is the boss room
+            else if (i == listOfRooms.Count - 10) // Last generated room is the boss room, 10 rooms after that are hallways
             {
                 BossRoom bossRoom = new BossRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner, bossPrefab, transform);
                 bossRoom.SpawnBoss();
-                //AddBossToRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner);
             }
             else
             {
@@ -95,31 +95,6 @@ public class DungeonCreator : MonoBehaviour
         }
     }
 
-    private void SpawnEntityInCenter(Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner, GameObject prefab)
-    {
-        Vector3 spawnPosition = new Vector3(
-            (bottomLeftAreaCorner.x + topRightAreaCorner.x) / 2f,
-            0,
-            (bottomLeftAreaCorner.y + topRightAreaCorner.y) / 2f
-        );
-
-        Instantiate(prefab, spawnPosition, Quaternion.identity, transform);
-    }
-    private void MoveEntityToRoomCenter(Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner, GameObject objectToMove)
-    {
-        Vector3 playerPosition = new Vector3(
-            (bottomLeftAreaCorner.x + topRightAreaCorner.x) / 2f,
-            0,
-            (bottomLeftAreaCorner.y + topRightAreaCorner.y) / 2f
-        );
-
-        objectToMove.transform.position = playerPosition;
-    }
-
-    private void AddPlayerToRoom(Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner)
-    {
-        MoveEntityToRoomCenter(bottomLeftAreaCorner, topRightAreaCorner, player);
-    }
     private void AddRandomObjects(Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner)
     {
         int numberOfObjects = UnityEngine.Random.Range(1, 4);
