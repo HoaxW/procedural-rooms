@@ -26,6 +26,8 @@ public class DungeonCreator : MonoBehaviour
     List<Vector3Int> possibleWallVerticalPosition;
     [SerializeField] private List<GameObject> objectPrefabs;
     [SerializeField] private GameObject bossPrefab;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject patrolPrefab;
     [SerializeField] private GameObject player;
     void Start()
     {
@@ -70,8 +72,8 @@ public class DungeonCreator : MonoBehaviour
             }
             else if (i == listOfRooms.Count - 10) // Last generated room is the boss room, 10 rooms after that are hallways
             {
-                BossRoom bossRoom = new BossRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner, bossPrefab, transform);
-                bossRoom.SpawnBoss();
+                BossRoom bossRoom = new BossRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner, bossPrefab, transform, player);
+                bossRoom.SetUpBossRoom();
             }
             else
             {
@@ -80,6 +82,8 @@ public class DungeonCreator : MonoBehaviour
             }
         }
         CreateWalls(wallParent);
+        EnemyGenerator enemyGenerator = new EnemyGenerator(enemyPrefab, patrolPrefab, this);
+        enemyGenerator.GenerateEnemies(listOfRooms);
     }
     private void GenerateNavMesh(GameObject room)
     {
