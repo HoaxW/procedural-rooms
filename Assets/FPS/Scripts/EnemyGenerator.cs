@@ -106,9 +106,6 @@ public class EnemyGenerator : MonoBehaviour
     {
         float x = (bottomLeftCorner.x + topRightCorner.x) / 2f;
         float z = (bottomLeftCorner.y + topRightCorner.y) / 2f;
-        Debug.Log("Bottom Left Corner: " + bottomLeftCorner);
-        Debug.Log("Top Right Corner: " + topRightCorner);
-        Debug.Log("Middle of room: " + new Vector3(x, 0, z));
         return new Vector3(x, 0, z);
     }
 
@@ -116,7 +113,6 @@ public class EnemyGenerator : MonoBehaviour
     {
         float roomWidth = topRightCorner.x - bottomLeftCorner.x;
         float roomHeight = topRightCorner.y - bottomLeftCorner.y;
-        Debug.Log("Width:" + roomWidth + " and Height:" + roomHeight);
         return roomWidth >= minRoomSize && roomHeight >= minRoomSize;
     }
 }

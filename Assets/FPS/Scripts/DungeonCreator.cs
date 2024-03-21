@@ -72,7 +72,7 @@ public class DungeonCreator : MonoBehaviour
             }
             else if (i == listOfRooms.Count - 10) // Last generated room is the boss room, 10 rooms after that are hallways
             {
-                BossRoom bossRoom = new BossRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner, bossPrefab, transform, player);
+                BossRoom bossRoom = new BossRoom(listOfRooms[i].BottomLeftAreaCorner, listOfRooms[i].TopRightAreaCorner, bossPrefab, transform, enemyPrefab, player);
                 bossRoom.SetUpBossRoom();
             }
             else
@@ -135,8 +135,8 @@ public class DungeonCreator : MonoBehaviour
 
     private bool IsTooCloseToWallOrDoorway(Vector3 position)
     {
-        float minDistanceToWall = 4.0f;
-        float minDistanceToDoorway = 4.0f;
+        float minDistanceToWall = 6.0f;
+        float minDistanceToDoorway = 6.0f;
 
         foreach (Vector3Int doorwayPosition in possibleDoorVerticalPosition)
         {

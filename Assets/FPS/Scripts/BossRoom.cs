@@ -13,14 +13,17 @@ public class BossRoom : MonoBehaviour
     private GameObject bossInstance;
     private float wallHeight = 4.4f;
     private float wallDepth = 0.1f;
+    private GameObject enemyPrefab;
     private GameObject player;
     private Material wallMaterial;
-    public BossRoom(Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner, GameObject bossPrefab, Transform dungeonTransform, GameObject player)
+    private bool spawnedEnemies = false;
+    public BossRoom(Vector2Int bottomLeftAreaCorner, Vector2Int topRightAreaCorner, GameObject bossPrefab, Transform dungeonTransform, GameObject enemyPrefab ,GameObject player)
     {
         this.bottomLeftAreaCorner = bottomLeftAreaCorner;
         this.topRightAreaCorner = topRightAreaCorner;
         this.bossPrefab = bossPrefab;
         this.parentTransform = dungeonTransform;
+        this.enemyPrefab = enemyPrefab;
         this.player = player; // pass this down to PlayerInteraction
     }
     public void SetUpBossRoom()
@@ -34,13 +37,36 @@ public class BossRoom : MonoBehaviour
         );
         bossInstance = GameObject.Instantiate(bossPrefab, spawnPosition, Quaternion.identity, parentTransform);
         Health bossHealth = bossInstance.GetComponent<Health>();
+
         if (bossHealth != null)
         {
             bossHealth.OnDie += OnBossDeath;
+            bossHealth.OnDamaged += CheckBossHealth;
         }
         wallMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
         wallMaterial.color = Color.yellow;
         BlockCorridors();
+    }
+
+    private void CheckBossHealth(float arg0, GameObject arg1)
+    {
+        float currentHealth = bossInstance.GetComponent<Health>().CurrentHealth;
+        float maxHealth = bossInstance.GetComponent<Health>().MaxHealth;
+        if (currentHealth < maxHealth / 2 && !spawnedEnemies)
+        {
+            SpawnEnemies();
+            spawnedEnemies = true;
+        }
+    }
+
+    private void SpawnEnemies()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 spawnPosition = new Vector3((bottomLeftAreaCorner.x + topRightAreaCorner.x) / 2f,0,
+                (bottomLeftAreaCorner.y + topRightAreaCorner.y) / 2f);
+            GameObject.Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, parentTransform);
+        }
     }
 
     private void BlockCorridors()
