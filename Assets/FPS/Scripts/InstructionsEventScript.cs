@@ -20,6 +20,7 @@ public class InstructionsEventScript : MonoBehaviour
     {
         PlayerInteraction.OnPlayerNearBossRoom -= PlayerNearbyBossRoom;
         PlayerInteraction.OnPlayerFarFromBossRoom -= PlayerFarFromBossRoom;
+        child.SetActive(true);
     }
     private void PlayerFarFromBossRoom(object sender, EventArgs e)
     {

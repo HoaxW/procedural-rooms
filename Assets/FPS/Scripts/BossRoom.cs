@@ -28,7 +28,6 @@ public class BossRoom : MonoBehaviour
     }
     public void SetUpBossRoom()
     {
-        Debug.Log("Bottom left corner boss: " + bottomLeftAreaCorner);
         // Spawns the boss in the middle of the room
         Vector3 spawnPosition = new Vector3(
             (bottomLeftAreaCorner.x + topRightAreaCorner.x) / 2f,

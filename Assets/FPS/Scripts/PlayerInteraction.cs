@@ -7,7 +7,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private GameObject bossInstance;
     private GameObject player;
-    private float moveDistance = 8.0f;
+    private float moveDistance = 2.0f;
     private float interactionDistance = 2.2f;
     private bool isPlayerNearBossRoom = false;
     public void SetReferences(GameObject bossInstance, GameObject player)
@@ -18,6 +18,10 @@ public class PlayerInteraction : MonoBehaviour
     private void Update()
     {
         float distanceToPlayer = GetDistanceToPlayer();
+        if (isPlayerNearBossRoom && Input.GetKeyDown(KeyCode.F))
+        {
+            TeleportPlayerToBossRoom();
+        }
         if (distanceToPlayer <= interactionDistance && !isPlayerNearBossRoom)
         {
             isPlayerNearBossRoom = true;
@@ -27,10 +31,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             isPlayerNearBossRoom = false;
             OnPlayerFarFromBossRoom?.Invoke(this, EventArgs.Empty);
-        }
-        if (isPlayerNearBossRoom && Input.GetKeyDown(KeyCode.F))
-        {
-            TeleportPlayerToBossRoom();
         }
     }
     private float GetDistanceToPlayer()
@@ -43,8 +43,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         Vector3 directionToBoss = bossInstance.transform.position - player.transform.position;
         directionToBoss.y = 0;
-        directionToBoss.Normalize();
 
-        player.transform.Translate(directionToBoss * moveDistance, Space.World);
+        player.transform.position += directionToBoss.normalized * moveDistance;
     }
 }
